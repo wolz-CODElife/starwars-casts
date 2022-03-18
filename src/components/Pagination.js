@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { theme } from '../utils/theme'
 
@@ -12,7 +12,7 @@ const Pagination = (props) => {
               <p>Showing <span>{totalCharacters}</span></p>
           </div>
           <div className="details">
-              <p>Total Height <span>{totalHeight}</span></p>
+              <p>Total Height <span>{`${totalHeight} cm (${Math.floor(totalHeight/30.48)}ft/${((totalHeight%30.48)/2.54).toFixed(2)}in)`}</span></p>
           </div>
       </PaginationSection>
   )

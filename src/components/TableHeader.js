@@ -1,21 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { IconFilterList } from '../utils/icons'
 import { theme } from '../utils/theme'
 
-const TableHeader = () => {
-    const [openFilter, setOpenFilter] = useState(false)
+const TableHeader = ({sortCharacterDetails}) => {
     return (
         <TableHeaderContainer>
             <tr>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Name <IconFilterList /></button>
+                    <button className='btn' onClick={() => sortCharacterDetails('name')}>Name <IconFilterList /></button>
                 </th>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Gender <IconFilterList /></button>
+                    <button className='btn' onClick={() => sortCharacterDetails('gender')}>Gender <IconFilterList /></button>
                 </th>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Height <IconFilterList /></button>
+                    <button className='btn' onClick={() => sortCharacterDetails('height')}>Height <IconFilterList /></button>
                 </th>
             </tr>
         </TableHeaderContainer>

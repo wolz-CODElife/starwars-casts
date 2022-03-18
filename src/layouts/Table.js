@@ -10,11 +10,14 @@ import { theme } from '../utils/theme'
 const Table = ({characters}) => {
     const [totalHeight, setTotalHeight] = useState(0)
     const [dataList, setDataList] = useState([])
+    const [sorter, setSorter] = useState('')
     const [pending, setPending] = useState(false)
 
     useEffect(() => {
         setPending(true)
         getCharacterDetails(characters)
+
+        // eslint-disable-next-line
     }, [characters])
     
 
@@ -25,18 +28,63 @@ const Table = ({characters}) => {
      */
     const getCharacterDetails = (characters) => {
         let charactersDetails = []
-        let sumHeight = 0
         characters.forEach(char => {
+            handleStillPending()
             getACharacterDetails(char).then(data => {
                 if(data){
                     charactersDetails.push({name: data.name, gender: data.gender, height: data.height, url: data.url})
-                    sumHeight =+ parseInt(data.height)
+                    if(parseInt(data.height) > 0) {
+                        setTotalHeight(totalHeight => parseInt(totalHeight) + parseInt(data.height))
+                    }
                 }
             })
         })
         setDataList(charactersDetails)
-        setTotalHeight(sumHeight)
-        setPending(false)
+        handleStopPending()
+    }
+
+    /**
+     * @param {String} characters - The field by which the array of characters should be sorted
+     * 
+     * @example sortCharacterDetails(['name']) 
+     */
+    const sortCharacterDetails = (sortBy) => {
+        let sortedCharacters = [] 
+        if(sortBy === sorter) {
+            setSorter('')
+            if(sortBy === 'height'){
+                sortedCharacters = dataList.sort((a, b) => (parseInt(a[sortBy]) > parseInt(b[sortBy])) ? -1 : 1)
+            }
+            else{
+                sortedCharacters = dataList.sort((a, b) => (a[sortBy] > b[sortBy]) ? -1 : 1)
+            }
+            setDataList(sortedCharacters)
+        }
+        else {
+            setSorter(sortBy)
+            if(sortBy === 'height'){
+                sortedCharacters = dataList.sort((a, b) => (parseInt(a[sortBy]) > parseInt(b[sortBy])) ? 1 : -1)
+            }
+            else{
+                sortedCharacters = dataList.sort((a, b) => (a[sortBy] > b[sortBy]) ? 1 : -1)
+            }
+            setDataList(sortedCharacters)
+        }
+    }
+    
+    
+    let closingTimer
+    let closingInterval = 2000
+
+    const handleStopPending = () => {
+        clearTimeout(closingTimer)
+        closingTimer = setTimeout(() => {
+            setPending(false)
+        }, closingInterval);
+    }
+    
+    const handleStillPending = () => {
+        clearTimeout(closingTimer)
     }
 
     return (
@@ -45,7 +93,7 @@ const Table = ({characters}) => {
                 <>
                     <div className="table_responsive">
                         <table>
-                            <TableHeader />
+                            <TableHeader sortCharacterDetails={sortCharacterDetails} />
                             <tbody>
                                 {dataList?.map((char) => (
                                     <TableRows char={char} key={char.url} />

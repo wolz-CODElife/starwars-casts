@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { IconFemale, IconMale, IconTransgender } from '../utils/icons'
 import { theme } from '../utils/theme'
@@ -11,7 +11,7 @@ const TableRows = ({char}) => {
             <TR>
                 <td>{char.name}</td>
                 <td>{char.gender === 'male'? <IconMale />: char.gender === 'female'? <IconFemale /> : <IconTransgender />}</td>
-                <td>{char.height}</td>
+                <td>{`${char.height} cm`}</td>
             </TR>
         </>
 
