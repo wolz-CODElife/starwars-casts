@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import PageRoutes from './routes/Routes'
 import { GetMovies } from './services/api'
-import { IconAngleDown } from './utils/icons'
+import { IconAngleDown, IconFilterList } from './utils/icons'
 import Loader from './components/Loader'
 import { theme } from './utils/theme'
 import NavLink from './components/NavLink'
@@ -11,6 +11,7 @@ import NavLink from './components/NavLink'
 const App = () => {
   const [openDropDown, setOpenDropDown] = useState(false)
   const [movies, setMovies] = useState([])
+  const [sorted, setSorted] = useState(false)
   const [pending, setPending] = useState(false)
 
   // Rerender component using useEffect after getting movies list
@@ -34,6 +35,26 @@ const App = () => {
   const handleDropDown = (e) => {
     e.preventDefault()
     setOpenDropDown(openDropDown => !openDropDown)
+  }
+
+  
+  /**
+   * @param {String} characters - The field by which the array of characters should be sorted
+   * 
+   * @example sortMovies() 
+   */
+    const sortMovies = () => {
+    let sortedMovies = []
+    if(sorted) {
+      sortedMovies = movies.sort((a, b) => (a.release_date > b.release_date) ? 1 : -1)
+      setMovies(sortedMovies)
+      setSorted(!sorted)
+    }
+    else {
+      sortedMovies = movies.sort((a, b) => (a.release_date > b.release_date) ? -1 : 1)
+      setMovies(sortedMovies)
+      setSorted(!sorted)
+    }
   }
   
   return (
@@ -63,7 +84,10 @@ const App = () => {
           </div>
           }
           
-          <button className='dropdown-btn' onClick={handleDropDown}>Choose a star wars movie <IconAngleDown /></button>
+          <div className='btns'>
+            <button className='dropdown-btn' onClick={handleDropDown}>Choose a star wars movie <IconAngleDown /></button>
+            <button className='filter' onClick={sortMovies}><IconFilterList /></button>
+          </div>
         </div>
       </div>
     </AppContainer>
@@ -118,27 +142,51 @@ const AppContainer = styled.div`
         }
       }
 
-      .dropdown-btn {
-        height: 40px;
-        padding: 0px 15px;
+      .btns {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background: ${theme.yellow};
-        border: none;
-        border-radius: 6px;
-        color: ${theme.black};
-        font-weight: 600;
-        cursor: pointer;
 
-        &:hover {
-          box-shadow: 0px 1.5px 5px #ccc;
+        .dropdown-btn {
+          height: 40px;
+          padding: 0px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: ${theme.yellow};
+          border: none;
+          border-radius: 6px;
+          color: ${theme.black};
+          font-weight: 600;
+          cursor: pointer;
+
+          &:hover {
+            box-shadow: 0px 1.5px 5px #ccc;
+          }
+
+          svg {
+            width: 20px;
+            height: 20px;
+            margin-left: 15px;
+          }
         }
 
-        svg {
-          width: 20px;
-          height: 20px;
-          margin-left: 15px;
+        .filter {
+          margin-left: 10px;
+          height: 40px;
+          padding: 0px 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: ${theme.yellow};
+          border: none;
+          border-radius: 6px;
+          color: ${theme.black};
+          font-weight: 600;
+          cursor: pointer;
+
+          svg {
+            width: 20px;
+            height: 20px;
+          }
         }
       }
     }

@@ -10,8 +10,12 @@ import { theme } from '../utils/theme'
 const Table = ({characters}) => {
     const [totalHeight, setTotalHeight] = useState(0)
     const [dataList, setDataList] = useState([])
+    const [filteredList, setFilteredList] = useState([])
     const [sorter, setSorter] = useState('')
+    const [filter, setFilter] = useState('All')
     const [pending, setPending] = useState(false)
+    // Conditionally set movielist as filteredList else original dataList
+    const movieList = filteredList.length > 0 ? filteredList : dataList
 
     useEffect(() => {
         setPending(true)
@@ -29,12 +33,14 @@ const Table = ({characters}) => {
     const getCharacterDetails = (characters) => {
         let charactersDetails = []
         characters.forEach(char => {
+            // while still in look stop update timeout
             handleStillPending()
             getACharacterDetails(char).then(data => {
                 if(data){
                     charactersDetails.push({name: data.name, gender: data.gender, height: data.height, url: data.url})
+                    // Exclude height that have NAN as value, include only positive integers
                     if(parseInt(data.height) > 0) {
-                        setTotalHeight(totalHeight => parseInt(totalHeight) + parseInt(data.height))
+                        setTotalHeight(parseInt(totalHeight) + parseInt(data.height))
                     }
                 }
             })
@@ -52,6 +58,7 @@ const Table = ({characters}) => {
         let sortedCharacters = [] 
         if(sortBy === sorter) {
             setSorter('')
+            // Convert value of height to integer  before sorting
             if(sortBy === 'height'){
                 sortedCharacters = dataList.sort((a, b) => (parseInt(a[sortBy]) > parseInt(b[sortBy])) ? -1 : 1)
             }
@@ -62,6 +69,7 @@ const Table = ({characters}) => {
         }
         else {
             setSorter(sortBy)
+            // Convert value of height to integer  before sorting
             if(sortBy === 'height'){
                 sortedCharacters = dataList.sort((a, b) => (parseInt(a[sortBy]) > parseInt(b[sortBy])) ? 1 : -1)
             }
@@ -71,11 +79,37 @@ const Table = ({characters}) => {
             setDataList(sortedCharacters)
         }
     }
+
+    /**
+     * @param {Event} e - onChange event
+     * 
+     * @example handleFilter(e)
+     */
+    const handleFilter = (e) => {
+        let selectedFilter = e.target.value
+        let filteredCharacters = [] 
+        // If filter set to all, use origin datalist; empty filteredList
+        setFilter(selectedFilter)
+        if(selectedFilter === 'ALL'){
+            setFilteredList([])
+        }
+        else {
+            if(selectedFilter === 'Non-Binary'){
+                filteredCharacters = dataList.filter(person => person.gender.toLowerCase() !== 'male' && person.gender.toLowerCase() !== 'female' )
+                setFilteredList(filteredCharacters)
+            }
+            else {
+                filteredCharacters = dataList.filter(person => person.gender.toLowerCase() === selectedFilter.toLowerCase())
+                setFilteredList(filteredCharacters)
+            }
+        }
+    }
     
-    
+    // set timer to end pending state
     let closingTimer
     let closingInterval = 2000
 
+    
     const handleStopPending = () => {
         clearTimeout(closingTimer)
         closingTimer = setTimeout(() => {
@@ -92,19 +126,28 @@ const Table = ({characters}) => {
             {!pending ?
                 <>
                     <div className="table_responsive">
+                        <div className="form">
+                            <select onChange={handleFilter}>
+                                <option value={filter}>{filter}</option>
+                                <option value="All">All</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Non-Binary">Non-Binary</option>
+                            </select>
+                        </div>
                         <table>
                             <TableHeader sortCharacterDetails={sortCharacterDetails} />
                             <tbody>
-                                {dataList?.map((char) => (
+                                {movieList?.map((char) => (
                                     <TableRows char={char} key={char.url} />
                                     ))}
                             </tbody>
                         </table>
                     </div>
-                    <Pagination totalHeight={totalHeight} totalCharacters={dataList.length} />
+                    <Pagination totalHeight={totalHeight} totalCharacters={movieList.length} />
                 </>
             :
-                <Loader color={theme.yellow} height="30px" width="30px" />
+                <Loader color={theme.yellow} height="80px" width="80px" />
             }
         </TableContainer>
     )
@@ -113,6 +156,23 @@ const Table = ({characters}) => {
 export default Table
 
 const TableContainer = styled.div`
+    .form {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        select {
+            height: 35px;
+            padding: 0px 10px;
+            background: ${theme.yellow};
+            border: none;
+            border-radius: 6px;
+            color: ${theme.black};
+            font-weight: 600;
+            cursor: pointer;
+        }
+    }
+
     .table_responsive {
         background: ${theme.black0};
         // background: #FFFFFF;

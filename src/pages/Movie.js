@@ -9,12 +9,29 @@ const Movie = () => {
     const { id } = useParams()
     const [movie, setMoive] = useState()
     const [pending, setPending] = useState(false)
+    const [crawl, setCrawl] = useState('')
     
 
     useEffect(() => {
         setPending(true)
         getThisMovie(id)
     }, [id])
+
+    useEffect(() => {
+        updateCrawl(crawl)
+        // eslint-disable-next-line
+    }, [movie])
+    
+    const updateCrawl = (crawl) => {
+        if(movie) {
+            let oldCrawl = movie.opening_crawl
+            setInterval(() => {
+                let newCrawl = crawl + oldCrawl[0]
+                setCrawl(newCrawl)
+                oldCrawl = oldCrawl.substring(1)
+            }, 500)
+        }
+    }
     
     /**
      * 
@@ -34,7 +51,7 @@ const Movie = () => {
         setPending(false)
     }
 
-    // console.log(movie);
+    console.log(movie);
 
     return (
         <MovieContainer>
@@ -44,7 +61,9 @@ const Movie = () => {
                 movie ?
                     <>
                         <h1>{movie.title}</h1>
-                        <div>{movie.opening_crawl}</div>
+                        <p>Produced by: {movie.producer}</p>
+                        <p>Directed by: {movie.director}</p>
+                        <div className='crawler'>{crawl}</div>
                         <Table characters={movie.characters} />
                     </>
                 :
@@ -63,6 +82,10 @@ export default Movie
 const MovieContainer = styled.div`
     color: ${theme.white0};
     padding: 40px;
+
+    .crawler {
+        margin: 40px 0px;
+    }
 
     .error, .spinner {
         width: 100%;
