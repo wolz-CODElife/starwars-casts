@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import Loader from '../components/Loader'
 import Table from '../layouts/Table'
+import { IconHomeCircle } from '../utils/icons'
 import { theme } from '../utils/theme'
 
 const Movie = () => {
@@ -18,18 +19,28 @@ const Movie = () => {
     }, [id])
 
     useEffect(() => {
-        updateCrawl(crawl)
+        updateCrawl()
         // eslint-disable-next-line
     }, [movie])
     
-    const updateCrawl = (crawl) => {
+    
+    /**
+     * This creates an animation-like entry for the opening crawl.
+     * 
+     */
+    const updateCrawl = () => {
         if(movie) {
             let oldCrawl = movie.opening_crawl
-            setInterval(() => {
-                let newCrawl = crawl + oldCrawl[0]
-                setCrawl(newCrawl)
+            // Set an interval of 0.05s before prepending the
+            // next character of the initial opening crawl to the visible crawl 
+            const timeCrawler = setInterval(() => {
+                setCrawl(crawl => crawl + oldCrawl[0])
                 oldCrawl = oldCrawl.substring(1)
-            }, 500)
+
+                if(oldCrawl.length < 1){
+                    clearInterval(timeCrawler)
+                }
+            }, 50)
         }
     }
     
@@ -51,18 +62,16 @@ const Movie = () => {
         setPending(false)
     }
 
-    console.log(movie);
-
     return (
         <MovieContainer>
-            {/* Conditionally display loaidng spinner */}
-            
+            <a href="/" className='homenav'><IconHomeCircle /></a>
+            {/* Conditionally display loaidng spinner  */}
             {!pending ?
                 movie ?
                     <>
                         <h1>{movie.title}</h1>
-                        <p>Produced by: {movie.producer}</p>
-                        <p>Directed by: {movie.director}</p>
+                        <p className='movie_text'>Produced by: {movie.producer}</p>
+                        <p className='movie_text'>Directed by: {movie.director}</p>
                         <div className='crawler'>{crawl}</div>
                         <Table characters={movie.characters} />
                     </>
@@ -82,6 +91,19 @@ export default Movie
 const MovieContainer = styled.div`
     color: ${theme.white0};
     padding: 40px;
+
+    .homenav {
+        svg {
+            width: 35px;
+            height: 35px;
+            color: ${theme.yellow};
+        }
+    }
+
+    .movie_text {
+        color: ${theme.yellowOpac};
+        font-size: 14px;
+    }
 
     .crawler {
         margin: 40px 0px;

@@ -8,7 +8,7 @@ const TableRows = ({char}) => {
 
     return (
         <>
-            <TR>
+            <TR char={char}>
                 <td>{char.name}</td>
                 <td>{char.gender === 'male'? <IconMale />: char.gender === 'female'? <IconFemale /> : <IconTransgender />}</td>
                 <td>{`${char.height} cm`}</td>
@@ -31,22 +31,10 @@ const TR = styled.tr`
         padding-right: 45px;
         text-transform: capitalize;
 
-        span {
-            border-radius: 100px;
-            padding: 5px 10px;
-        }
-
-        button {
-            background: none;
-            border: none;
-            outline: none;
-            cursor: pointer;
-
-            svg {
-                width: 20px;
-                height: 20px;
-                color: #545F7D;
-            }
+        svg {
+            width: 30px;
+            height: 30px;
+            color: ${props => props.char.gender === 'male'? 'dodgerblue': props.char.gender === 'female'? 'pink' : 'white'};
         }
     }
 

@@ -158,8 +158,10 @@ export default Table
 const TableContainer = styled.div`
     .form {
         width: 100%;
+        height: 40px;
         display: flex;
         justify-content: flex-end;
+        position: relative;
 
         select {
             height: 35px;
@@ -170,15 +172,15 @@ const TableContainer = styled.div`
             color: ${theme.black};
             font-weight: 600;
             cursor: pointer;
+            position: absolute;
         }
     }
 
     .table_responsive {
         background: ${theme.black0};
-        // background: #FFFFFF;
-        box-shadow: 3px 5px 20px #0000000A;
+        box-shadow: 0px 0px 20px ${theme.yellowOpac};
         border: 1px solid ${theme.yellowOpac};
-        border-radius: 4px;
+        border-radius: 10px;
         padding: 30px;
         overflow-x: auto;
         height: max-content;
