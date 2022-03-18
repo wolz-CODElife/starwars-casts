@@ -85,13 +85,16 @@ please take some time to present an interface that shows a fundamental
 grasp of the domain.
 
 ## Demo
-This demo exercises the application requirements: [starwars-casts.web.app](starwars-casts.web.app)
+This demo exercises the application requirements: [starwars-casts.web.app](https://starwars-casts.web.app)
 
 THe following images previews the demo of the application:
+
 ![image](https://user-images.githubusercontent.com/55518764/159081570-cbd93061-d434-49d8-a020-efe494191f5c.png)
 
 ---
+![image](https://user-images.githubusercontent.com/55518764/159095765-dee12b00-35be-475a-ae32-8a0a3bfd277e.png)
 
+---
 
 ## Deployment
 
