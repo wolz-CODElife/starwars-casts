@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { IconSpinner } from './icons'
-import { theme } from './theme'
+import { IconSpinner } from '../utils/icons'
+import { theme } from '../utils/theme'
 
 /**
  * 

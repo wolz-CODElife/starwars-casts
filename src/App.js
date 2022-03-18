@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import PageRoutes from './routes/Routes'
+import { GetMovies } from './services/api'
 import { IconAngleDown } from './utils/icons'
-import Loader from './utils/Loader'
+import Loader from './components/Loader'
 import { theme } from './utils/theme'
+import NavLink from './components/NavLink'
 
 const App = () => {
   const [openDropDown, setOpenDropDown] = useState(false)
-  const [moives, setMovies] = useState([])
+  const [movies, setMovies] = useState([])
   const [pending, setPending] = useState(false)
+
+  // Rerender component using useEffect after getting movies list
+  useEffect(() => {
+    // Set pending to true, to initate loader
+    setPending(true)
+    // Call api method to get movies
+    GetMovies().then(data => {
+      if(data) {
+        setMovies(data)
+      }
+      // Set pending to false, to terminate loader
+      setPending(false)
+    })
+  }, [])
 
   /**
    * This event handles onclick dropdown buttin 
@@ -32,11 +48,17 @@ const App = () => {
           {openDropDown &&
           <div className="popnav">
             <div className="menu">
-              <a href="/">Choose a star wars movie <IconAngleDown /></a>
-              <Loader color={theme.yellow} height="40px" width="40px" />
-              <a href="/">Choose a star wars movie <IconAngleDown /></a>  
-              <a href="/">Choose a star wars movie <IconAngleDown /></a>  
-              <a href="/">Choose a star wars movie <IconAngleDown /></a>  
+              {/* Conditionally display loaidng spinner */}
+              {!pending ?
+                movies.length > 0 ?
+                  movies.map(movie => (
+                    <NavLink key={movie.episode_id} movie={movie} />
+                  ))
+                :
+                  <p>No movies found !</p>  
+              :
+                <Loader color={theme.yellow} height="40px" width="40px" />
+              }
             </div>
           </div>
           }
@@ -81,23 +103,17 @@ const AppContainer = styled.div`
           background: ${theme.white};
           margin-bottom: 10px;
           max-width: 100%;
-          min-width: 200px;
+          min-width: 300px;
           padding: 5px;
           border: 0.1px solid ${theme.black0};
           border-radius: 8px;
           height: 200px;
           overflow-y: auto;
-          
-          a {
-            display: block;
-            border-radius: 4px;
-            padding: 10px;
-            text-decoration: none;
-            color: ${theme.black};
 
-            &:hover {
-              background: ${theme.yellowOpac};
-            }
+          p {
+            padding: 10px;
+            color: red;
+            text-align: center;
           }
         }
       }
