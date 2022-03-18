@@ -7,18 +7,19 @@ import TableRows from '../components/TableRows'
 import { theme } from '../utils/theme'
 
 const Table = ({characters}) => {
-    const [countPerPage, setCountPerPage] = useState(50)
-    const [totalRecord, setTotalRecord] = useState(0)
+    const [totalCharacters, setTotalCharacters] = useState(0)
+    const [totalHeight, setTotalRecord] = useState(0)
     const [dataList, setDataList] = useState([])
 
     useState(() => {
         setDataList(characters)
-        setTotalRecord(characters.length)
-    }, [page, countPerPage])
+    }, [characters])
+
+    console.log(dataList);
 
     return (
         <TableContainer>
-            {totalRecord > 0 ?
+            {totalHeight > 0 ?
                 <>
                     <div className="table_responsive">
                         <table>
@@ -30,7 +31,7 @@ const Table = ({characters}) => {
                             </tbody>
                         </table>
                     </div>
-                    <Pagination countPerPage={countPerPage} setCountPerPage={setCountPerPage} totalRecord={totalRecord} page={page} setPage={setPage} />
+                    <Pagination totalCharacters={totalCharacters} setTotalCharacters={setTotalCharacters} totalHeight={totalHeight} />
                 </>
             :
             <Loader color={theme.yellow} height="30px" width="30px" />

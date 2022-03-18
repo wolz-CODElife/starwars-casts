@@ -43,6 +43,8 @@ const Movie = () => {
             {!pending ?
                 movie ?
                     <>
+                        <h1>{movie.title}</h1>
+                        <marquee behavior="scroll" direction="left">{movie.opening_crawl}</marquee>
                         <Table characters={movie.characters} />
                     </>
                 :
