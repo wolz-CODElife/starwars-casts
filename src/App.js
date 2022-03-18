@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import styled from 'styled-components'
 import PageRoutes from './routes/Routes'
@@ -7,7 +7,18 @@ import Loader from './utils/Loader'
 import { theme } from './utils/theme'
 
 const App = () => {
+  const [openDropDown, setOpenDropDown] = useState(false)
+  const [moives, setMovies] = useState([])
+  const [pending, setPending] = useState(false)
 
+  /**
+   * This event handles onclick dropdown buttin 
+   * @param {*} e - Event onlick 
+   */
+  const handleDropDown = (e) => {
+    e.preventDefault()
+    setOpenDropDown(openDropDown => !openDropDown)
+  }
   
   return (
     <AppContainer>
@@ -17,16 +28,20 @@ const App = () => {
 
       <div className="nav">
         <div className="dropdown">
+          {/* Conditionally display dropdown */}
+          {openDropDown &&
           <div className="popnav">
             <div className="menu">
-              <a href="/">Choose a star wars movie <IconAngleDown /></a>  
+              <a href="/">Choose a star wars movie <IconAngleDown /></a>
               <Loader color={theme.yellow} height="40px" width="40px" />
               <a href="/">Choose a star wars movie <IconAngleDown /></a>  
               <a href="/">Choose a star wars movie <IconAngleDown /></a>  
               <a href="/">Choose a star wars movie <IconAngleDown /></a>  
             </div>
           </div>
-          <button className='dropdown-btn'>Choose a star wars movie <IconAngleDown /></button>
+          }
+          
+          <button className='dropdown-btn' onClick={handleDropDown}>Choose a star wars movie <IconAngleDown /></button>
         </div>
       </div>
     </AppContainer>
@@ -39,7 +54,7 @@ export default App
 // App container styled component
 const AppContainer = styled.div`
   min-height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.4);
 
   .nav {
     position: fixed;
@@ -65,6 +80,8 @@ const AppContainer = styled.div`
         .menu{
           background: ${theme.white};
           margin-bottom: 10px;
+          max-width: 100%;
+          min-width: 200px;
           padding: 5px;
           border: 0.1px solid ${theme.black0};
           border-radius: 8px;
