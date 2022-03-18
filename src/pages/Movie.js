@@ -28,13 +28,13 @@ const Movie = () => {
         if(id) {
             let movies = JSON.parse(localStorage.getItem('movies'))
             // Filter the movie list in localStorage for unique episode ID
-            let thisMovie = movies.filter(movie => parseInt(movie.episode_id) === parseInt(id))
+            let thisMovie = movies?.filter(movie => parseInt(movie.episode_id) === parseInt(id))[0]
             setMoive(thisMovie)
         }
         setPending(false)
     }
 
-    console.log(movie);
+    // console.log(movie);
 
     return (
         <MovieContainer>
@@ -44,7 +44,7 @@ const Movie = () => {
                 movie ?
                     <>
                         <h1>{movie.title}</h1>
-                        <marquee behavior="scroll" direction="left">{movie.opening_crawl}</marquee>
+                        <div>{movie.opening_crawl}</div>
                         <Table characters={movie.characters} />
                     </>
                 :
@@ -62,6 +62,7 @@ export default Movie
 
 const MovieContainer = styled.div`
     color: ${theme.white0};
+    padding: 40px;
 
     .error, .spinner {
         width: 100%;

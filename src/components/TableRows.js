@@ -1,18 +1,17 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { IconFemale, IconMale, IconTransgender } from '../utils/icons'
+import { theme } from '../utils/theme'
 
 
-const TableRows = ({user}) => {
-    const {organization, userName, email, id, phone, date, status} = user
+const TableRows = ({char}) => {
 
     return (
         <>
             <TR>
-                <td>{organization}</td>
-                <td>{userName}</td>
-                <td>{email}</td>
-                <td>{phone}</td>
-                <td>{date}</td>
+                <td>{char.name}</td>
+                <td>{char.gender === 'male'? <IconMale />: char.gender === 'female'? <IconFemale /> : <IconTransgender />}</td>
+                <td>{char.height}</td>
             </TR>
         </>
 
@@ -22,7 +21,7 @@ const TableRows = ({user}) => {
 export default TableRows
 
 const TR = styled.tr`
-    border-bottom: 1px solid #213F7D1A;
+    border-bottom: 1px solid ${theme.yellowOpac};
     height: 60px;
     position: relative;
     
@@ -30,6 +29,7 @@ const TR = styled.tr`
     td {
         white-space: nowrap;
         padding-right: 45px;
+        text-transform: capitalize;
 
         span {
             border-radius: 100px;

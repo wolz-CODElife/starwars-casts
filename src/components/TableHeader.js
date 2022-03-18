@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { IconFilterList } from '../utils/icons'
+import { theme } from '../utils/theme'
 
 const TableHeader = () => {
     const [openFilter, setOpenFilter] = useState(false)
@@ -8,24 +9,14 @@ const TableHeader = () => {
         <TableHeaderContainer>
             <tr>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>organization <IconFilterList /></button>
+                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Name <IconFilterList /></button>
                 </th>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Username <IconFilterList /></button>
+                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Gender <IconFilterList /></button>
                 </th>
                 <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Email <IconFilterList /></button>
+                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Height <IconFilterList /></button>
                 </th>
-                <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Phone number <IconFilterList /></button>
-                </th>
-                <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Date joined <IconFilterList /></button>
-                </th>
-                <th>
-                    <button className='btn' onClick={() => setOpenFilter(!openFilter)}>Status <IconFilterList /></button>
-                </th>
-                <th></th>
             </tr>
         </TableHeaderContainer>
     )
@@ -47,11 +38,11 @@ const TableHeaderContainer = styled.thead`
         margin-right: 35px;
         text-transform: uppercase;
         text-align: left;
-        font-size: 12px;
+        font-size: 18px;
         font-weight: 600;
         display: flex;
         align-items: center;
-        color: #545F7D;
+        color: ${theme.yellow};
         padding: 20px 0px;
         cursor: pointer;
 

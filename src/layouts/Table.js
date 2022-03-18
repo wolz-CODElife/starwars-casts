@@ -1,40 +1,62 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Loader from '../components/Loader'
 import Pagination from '../components/Pagination'
 import TableHeader from '../components/TableHeader'
 import TableRows from '../components/TableRows'
+import { getACharacterDetails } from '../services/api'
 import { theme } from '../utils/theme'
 
 const Table = ({characters}) => {
-    const [totalCharacters, setTotalCharacters] = useState(0)
-    const [totalHeight, setTotalRecord] = useState(0)
+    const [totalHeight, setTotalHeight] = useState(0)
     const [dataList, setDataList] = useState([])
+    const [pending, setPending] = useState(false)
 
-    useState(() => {
-        setDataList(characters)
+    useEffect(() => {
+        setPending(true)
+        getCharacterDetails(characters)
     }, [characters])
+    
 
-    console.log(dataList);
+    /**
+     * @param {Array} characters - An array of characters url
+     * 
+     * @example getCharacterDetails([{String}, {String}]) 
+     */
+    const getCharacterDetails = (characters) => {
+        let charactersDetails = []
+        let sumHeight = 0
+        characters.forEach(char => {
+            getACharacterDetails(char).then(data => {
+                if(data){
+                    charactersDetails.push({name: data.name, gender: data.gender, height: data.height, url: data.url})
+                    sumHeight =+ parseInt(data.height)
+                }
+            })
+        })
+        setDataList(charactersDetails)
+        setTotalHeight(sumHeight)
+        setPending(false)
+    }
 
     return (
         <TableContainer>
-            {totalHeight > 0 ?
+            {!pending ?
                 <>
                     <div className="table_responsive">
                         <table>
                             <TableHeader />
                             <tbody>
-                                {dataList.map((movie) => (
-                                    <TableRows movie={movie} key={movie.id} />
+                                {dataList?.map((char) => (
+                                    <TableRows char={char} key={char.url} />
                                     ))}
                             </tbody>
                         </table>
                     </div>
-                    <Pagination totalCharacters={totalCharacters} setTotalCharacters={setTotalCharacters} totalHeight={totalHeight} />
+                    <Pagination totalHeight={totalHeight} totalCharacters={dataList.length} />
                 </>
             :
-            <Loader color={theme.yellow} height="30px" width="30px" />
+                <Loader color={theme.yellow} height="30px" width="30px" />
             }
         </TableContainer>
     )
@@ -44,9 +66,10 @@ export default Table
 
 const TableContainer = styled.div`
     .table_responsive {
-        background: #FFFFFF;
+        background: ${theme.black0};
+        // background: #FFFFFF;
         box-shadow: 3px 5px 20px #0000000A;
-        border: 1px solid #213F7D0F;
+        border: 1px solid ${theme.yellowOpac};
         border-radius: 4px;
         padding: 30px;
         overflow-x: auto;
@@ -65,9 +88,11 @@ const TableContainer = styled.div`
 
         table {
             border-collapse: collapse;
-            color: #545F7D;
+            color: ${theme.yellow};
             z-index: 1;
             width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
         }
     }
 `
