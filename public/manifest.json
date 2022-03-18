@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Starwars Casts",
+  "name": "Starwars Casts | A List of Star Wars Casts",
   "icons": [
     {
       "src": "https://swapi.dev/static/favicon.ico",
