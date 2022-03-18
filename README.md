@@ -86,6 +86,11 @@ grasp of the domain.
 
 ## Demo
 This demo exercises the application requirements: []()
+THe following images previews the demo of the application:
+![image](https://user-images.githubusercontent.com/55518764/159081570-cbd93061-d434-49d8-a020-efe494191f5c.png)
+
+---
+
 
 ## Deployment
 
