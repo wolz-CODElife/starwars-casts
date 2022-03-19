@@ -125,16 +125,16 @@ const Table = ({characters}) => {
         <TableContainer>
             {!pending ?
                 <>
+                    <div className="form">
+                        <select onChange={handleFilter}>
+                            <option value={filter}>{filter}</option>
+                            <option value="All">All</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Non-Binary">Non-Binary</option>
+                        </select>
+                    </div>
                     <div className="table_responsive">
-                        <div className="form">
-                            <select onChange={handleFilter}>
-                                <option value={filter}>{filter}</option>
-                                <option value="All">All</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Non-Binary">Non-Binary</option>
-                            </select>
-                        </div>
                         <table>
                             <TableHeader sortCharacterDetails={sortCharacterDetails} />
                             <tbody>
@@ -155,13 +155,13 @@ const Table = ({characters}) => {
 
 export default Table
 
-const TableContainer = styled.div`
+const TableContainer = styled.div`   
     .form {
         width: 100%;
         height: 40px;
         display: flex;
         justify-content: flex-end;
-        position: relative;
+        margin-bottom: 20px;
 
         select {
             height: 35px;
@@ -172,7 +172,6 @@ const TableContainer = styled.div`
             color: ${theme.black};
             font-weight: 600;
             cursor: pointer;
-            position: absolute;
         }
     }
 
@@ -194,7 +193,7 @@ const TableContainer = styled.div`
             border-radius: 8px;
             background: #213F7D;
             border: 1px solid black;
-        }
+        }        
 
         table {
             border-collapse: collapse;

@@ -26,7 +26,7 @@ const PaginationSection = styled.div`
     justify-content: space-between;
     align-items: center;
     
-    @media(max-width: 460px) {
+    @media(max-width: 520px) {
         flex-direction: column;
     }
     
@@ -34,7 +34,7 @@ const PaginationSection = styled.div`
         display: flex;
         align-items: center;
     
-        @media(max-width: 460px) {
+        @media(max-width: 520px) {
             margin-bottom: 10px;
         }
 
